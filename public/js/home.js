@@ -12,6 +12,10 @@ function syncClearList() {
     socket.emit('clearList', {})
 }
 
+function syncArchiveList() {
+    socket.emit('archiveList', {})
+}
+
 socket.on('reload', () => {
     location.reload()
 })
@@ -81,16 +85,21 @@ function setSizeLabel(id, text) {
     })
 }
 
-
-function _bindUpdateMetaInfo(e) {
+function _bindUpdateMetaInfo(e, fireEventName) {
     const id = e.target.id
     e.preventDefault()
     const text = document.getElementById(id).value
-    socket.emit('syncMeta', { id: id, text: text })
+    const metaObj = {
+        id: id,
+        text: text,
+        event: fireEventName
+    }
+    socket.emit('syncMeta', metaObj)
 }
+
 function updateMetaInfo(id) {
-    document.getElementById(id).addEventListener('keyup', _bindUpdateMetaInfo, false)
-    document.getElementById(id).addEventListener('change', _bindUpdateMetaInfo, false)
+    document.getElementById(id).addEventListener('keyup', _bindUpdateMetaInfo.bind(null, e, 'keyup'))
+    document.getElementById(id).addEventListener('change', _bindUpdateMetaInfo.bind(null, e, 'change'))
 }
 
 function addRow(order) {
@@ -167,6 +176,21 @@ function initVerifyClearListButton() {
     })
 }
 
+function initArchiveListButton() {
+    $('#archiveList').on('click', (e) => {
+        e.preventDefault()
+        $('#verifyArchiveListModal').modal('show')
+    })
+}
+
+function initVerifyArchiveListButton() {
+    $('#btnVerifyArchiveList').on('click', (e) => {
+        e.preventDefault()
+        syncArchiveList()
+        $('#verifyArchiveListModal').modal('hide')
+    })
+}
+
 function initOrder() {
     $('#saveOrder').on('click', (e) => {
         e.preventDefault()
@@ -219,6 +243,8 @@ $(document).ready(() => {
     initDateValue()
     initClearListButton()
     initVerifyClearListButton()
+    initArchiveListButton()
+    initVerifyArchiveListButton()
     initOrder()
 
     setSizeLabel('sizeSmall', 'Klein')

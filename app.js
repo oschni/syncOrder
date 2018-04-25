@@ -10,6 +10,7 @@ import config from './config'
 
 import express from 'express'
 import exphbs from 'express-handlebars'
+import handlebars from 'handlebars'
 const port = process.env.PORT || 9000
 const app = express()
 
@@ -43,12 +44,43 @@ app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 
+handlebars.registerHelper('ifCond', (v1, operator, v2, options) => {
+    switch (operator) {
+        case '==':
+            return (v1 == v2) ? options.fn(this) : options.inverse(this)
+        case '===':
+            return (v1 === v2) ? options.fn(this) : options.inverse(this)
+        case '!=':
+            return (v1 != v2) ? options.fn(this) : options.inverse(this)
+        case '!==':
+            return (v1 !== v2) ? options.fn(this) : options.inverse(this)
+        case '<':
+            return (v1 < v2) ? options.fn(this) : options.inverse(this)
+        case '<=':
+            return (v1 <= v2) ? options.fn(this) : options.inverse(this)
+        case '>':
+            return (v1 > v2) ? options.fn(this) : options.inverse(this)
+        case '>=':
+            return (v1 >= v2) ? options.fn(this) : options.inverse(this)
+        case '&&':
+            return (v1 && v2) ? options.fn(this) : options.inverse(this)
+        case '||':
+            return (v1 || v2) ? options.fn(this) : options.inverse(this)
+        default:
+            return options.inverse(this)
+    }
+})
+
 app.get('/', (req, res) => {
-  res.render('home')
+  res.render('home', {site: 'home'})
 })
 
 app.get('/hobbit', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'imgs', 'hobbit.pdf'))
+})
+
+app.get('/statistic', (req, res) => {
+  res.render('statistic')
 })
 
 http.listen(port, () => {
