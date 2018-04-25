@@ -79,10 +79,14 @@ app.get('/hobbit', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'imgs', 'hobbit.pdf'))
 })
 
+<<<<<<< HEAD
 app.get('/statistic', (req, res) => {
   res.render('statistic')
 })
+=======
+>>>>>>> master
 
 http.listen(port, () => {
   loginfo('Listening on port %d', port)
 })
+
