@@ -83,6 +83,10 @@ app.get('/statistic', (req, res) => {
   res.render('statistic')
 })
 
+app.get('/getStatisticData', serializeJson.getStatisticsData, (req, res) => {
+    res.json(res.statisticData)
+})
+
 http.listen(port, () => {
   loginfo('Listening on port %d', port)
 })

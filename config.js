@@ -3,7 +3,7 @@ import path from 'path'
 let config = {}
 
 config.serialization = {}
-config.serialization.archivePath = path.join(__dirname, 'data', 'archive')
+config.serialization.archivePath = path.join(__dirname, 'data', 'archive', 'archive.json')
 config.serialization.tableIdFilestorepath = path.join(__dirname, 'data', 'tableId.txt')
 config.serialization.ordersFilestorepath = path.join(__dirname, 'data', 'orders.json')
 config.serialization.metaFilestorepath = path.join(__dirname, 'data', 'meta.json')
