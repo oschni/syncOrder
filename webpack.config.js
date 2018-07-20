@@ -2,10 +2,13 @@ const path = require('path')
 
 module.exports = {
   mode: 'development',
-  entry: './public/js/home.js',
+  entry: {
+    home: './public/js/home.js',
+    footer: './public/js/footer.js'
+  },
   output: {
     path: path.resolve(__dirname, 'public', 'dist'),
-    filename: 'home.bundle.js',
+    filename: '[name].bundle.js',
     publicPath: '/dist/'
   },
   module: {
