@@ -5,6 +5,7 @@ module.exports = {
       watch: ['lib', 'app.js', 'routes', 'src/locales', 'ecosystem.config.js'],
       interpreter: 'babel-node',
       env: {
+        DEBUG: 'app:* serialization:* socketHobbit:*',
         NODE_ENV: 'development',
       },
       env_production: {

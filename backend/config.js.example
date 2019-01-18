@@ -1,24 +1,25 @@
 import path from 'path'
 
-let config = {
-  app: {
-    domain: ''
-  },
-  cookie: {
-    secret: '',
-    resave: false,
-    saveUninitialized: true
-  },
-  serialization: {
-    tableIdFilestorepath: path.join(__dirname, '..', 'data', 'tableId.txt'),
-    ordersFilestorepath: path.join(__dirname, '..', 'data', 'orders.json'),
-    metaFilestorepath: path.join(__dirname, '..', 'data', 'meta.json'),
-    paiedFilestorepath: path.join(__dirname, '..', 'data', 'paied.json'),
-    interval: 1000 * 60 * 5
-  },
-  socket: {
-
-  }
+const config = {
+    app: {
+        domain:                 'syncorder.example.com'
+    },
+    cookie: {
+        secret:                 'cookie_salt_key',
+        resave:                 false,
+        saveUninitialized:      true
+    },
+    serialization: {
+        tableIdFilestorepath:   path.join(__dirname, '..', 'data', 'tableId.txt'),
+        ordersFilestorepath:    path.join(__dirname, '..', 'data', 'orders.json'),
+        metaFilestorepath:      path.join(__dirname, '..', 'data', 'meta.json'),
+        paiedFilestorepath:     path.join(__dirname, '..', 'data', 'paied.json'),
+        interval:               1000 * 60 * 5
+    },
+    socket: {},
+    postgresql: {
+        connection:             'postgres://<username>:<password>@<hostname>:5432/<database>?ssl=1'
+    }
 }
 
 module.exports = config

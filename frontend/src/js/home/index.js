@@ -1,4 +1,4 @@
-import '../globals'
+/*import '../globals'
 import '../bulmahelpers'
 
 import debug from 'debug'
@@ -105,3 +105,4 @@ document.addEventListener('DOMContentLoaded', () => {
     elem.setAttribute('src', dataUrl)
   })
 })
+*/
