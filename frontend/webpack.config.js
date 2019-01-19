@@ -23,7 +23,7 @@ module.exports = {
         'home': './home/index.js'
     },
     output: {
-        path: path.join(__dirname, 'public', 'dist'),
+        path: path.join(__dirname, 'public', 'dist', 'bundles'),
         publicPath: 'dist/',
         filename: '[name].bundle.js'
     },

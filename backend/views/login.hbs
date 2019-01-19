@@ -1,26 +1,6 @@
-<div class="container-fluid">
-    <form class="form-signin {{authfailed}}" method="post" action="/login">
-        <h2 class="form-signin-heading">{{t "login.headline"}}</h2>
-        <label for="UserNameTextField" class="sr-only">{{t "login.email"}}</label>
-        <input type="text" id="UserNameTextField" name="username" maxlength=64 class="form-control" placeholder="{{t "login.email"}}" required="" autofocus="">
-        <label for="PasswordTextField" class="sr-only">{{t "login.password"}}</label>
-        <input type="password" id="PasswordTextField" name="password" class="form-control" placeholder="{{t "login.password"}}" required="">
-        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login" name="login">{{t "defaults.login"}}</button>
-
-        {{#if authfailed}}
-            <br>
-            <div class="alert alert-danger alert-dismissible" role="alert">
-            <strong>Ooops!</strong> {{authfailedmsg}}
-            </div>
-        {{/if}}
-
-        {{#if maintenance}}
-            <br>
-            <div class="alert alert-danger alert-dismissible" role="alert">
-            <strong>{{t "login.maintenancemode"}}!</strong> {{t "login.maintenancemodemessage"}}
-            </div>
-        {{/if}}
-    </form>
+<div id="app-login-page" class="container-fluid" hidden>
+    <login-page></login-page>
 </div>
+
 {{>javascripts}}
 <script src='dist/bundles/login.bundle.js'></script>

@@ -10,7 +10,7 @@ const logdebug      = debug('auth:debug')
 log.log             = console.log.bind(console)
 logdebug.log        = console.log.bind(console)
 
-const i18next       = require('i18next');
+const i18next       = require('i18next')
 
 router.get('/login', (req, res) => {
     log("Login called")
@@ -52,4 +52,4 @@ router.get('/logout', (req, res) => {
     })
 })
 
-export default router;
+export default router
