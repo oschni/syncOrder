@@ -1,13 +1,16 @@
 {
     "title": "PANF 2GO",
     "language": "Deutsch",
+    "defaults": {
+      "login": "Login",
+      "register": "Registrieren"
+    },
     "navbar": {
         "menucard": "Hobbit-Speisekarte",
         "davincicard": "DaVinci-Speisekarte",
         "deleteList": "Liste löschen"
     },
     "login": {
-        "headline": "",
         "email": "E-Mail Adresse",
         "password": "Passwort",
         "maintenancemode": "Der Laden ist zu!"

@@ -1,16 +1,19 @@
 {
     "title": "PANF 2GO",
     "language": "English",
+    "defaults": {
+      "login": "Login",
+      "register": "Register"
+    },
     "navbar": {
         "menucard": "Hobbit menu card",
         "davincicard": "DaVinci menu card",
         "deleteList": "Clear order list"
     },
     "login": {
-        "headline": "",
         "email": "E-Mail Address",
         "password": "Password",
-        "maintenancemode": "Firesale!"
+        "maintenancemode": "Closed due Firesale!"
     },
   "home": {
     "title": "WEB-PANF - v1.1",
