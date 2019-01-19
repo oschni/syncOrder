@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
+import express      from 'express'
+const router        = express.Router()
 
-router.use('/home', require('./home.js'))
-router.use('/hobbit', require('./hobbit'))
-router.use('/davinci', require('./davinci'))
+import root         from './root'
+import auth         from './auth'
 
+router.use(root)
+router.use(auth)
 
-
-module.exports = router
+export default router

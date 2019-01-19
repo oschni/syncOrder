@@ -1,11 +1,17 @@
 {
-  "title": "PANF 2GO",
-  "language": "English",
-  "navbar": {
-    "menucard": "Hobbit menu card",
-    "davincicard": "DaVinci menu card",
-    "deleteList": "Clear order list"
-  },
+    "title": "PANF 2GO",
+    "language": "English",
+    "navbar": {
+        "menucard": "Hobbit menu card",
+        "davincicard": "DaVinci menu card",
+        "deleteList": "Clear order list"
+    },
+    "login": {
+        "headline": "",
+        "email": "E-Mail Address",
+        "password": "Password",
+        "maintenancemode": "Firesale!"
+    },
   "home": {
     "title": "WEB-PANF - v1.1",
     "info": "You can open other browser tabs or windows at *.übersprung.de, while you edit this form, or before, or afterwards, or whenever you like. It just works.",

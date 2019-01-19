@@ -1,11 +1,17 @@
 {
-  "title": "PANF 2GO",
-  "language": "Deutsch",
-  "navbar": {
-    "menucard": "Hobbit-Speisekarte",
-    "davincicard": "DaVinci-Speisekarte",
-    "deleteList": "Liste löschen"
-  },
+    "title": "PANF 2GO",
+    "language": "Deutsch",
+    "navbar": {
+        "menucard": "Hobbit-Speisekarte",
+        "davincicard": "DaVinci-Speisekarte",
+        "deleteList": "Liste löschen"
+    },
+    "login": {
+        "headline": "",
+        "email": "E-Mail Adresse",
+        "password": "Passwort",
+        "maintenancemode": "Der Laden ist zu!"
+    },
   "home": {
     "title": "WEB-PANF - v1.1",
     "info": "Öffnen Sie ruhig weitere Webseiten von *.übersprung.de in einem separaten Browsertab/-fenster, während Sie das Formular ausfüllen, oder davor, oder danach, oder wann auch immer, da sich das Formular auch dann noch abschicken lässt.",

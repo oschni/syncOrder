@@ -1,107 +1,148 @@
-import debug                    from 'debug'
-const log                       = debug('app:info')
-const logerror                  = debug('app:error')
-const logdebug                  = debug('app:debug')
+'use strict';
 
-import fs                       from 'fs'
-import path                     from 'path'
+const config                            = require('./config')
 
-import config                   from './config'
+import debug                            from 'debug'
+const log                               = debug('app:info')
+const logerror                          = debug('app:error')
+const logdebug                          = debug('app:debug')
+log.log                                 = console.log.bind(console)
+logdebug.log                            = console.log.bind(console)
 
-import express                  from 'express'
-const helmet                    = require('helmet')
-import session                  from 'express-session'
-const RedisStore                = require('connect-redis')(session)
-const i18next                   = require('i18next')
-const i18nextExpressMiddleware  = require('i18next-express-middleware')
-const Backend                   = require('i18next-node-fs-backend')
-const exphbs                    = require('express-handlebars')
+import helmet                           from 'helmet'
+
+import express                          from 'express'
+import http                             from 'http'
+import SocketIO                         from 'socket.io'
+import routes                           from './routes'
+
+let app                                 = express()
+let server                              = http.createServer(app)
+let io                                  = new SocketIO(server)
+
+import hbs                              from 'express-hbs'
+import cookieParser                     from 'cookie-parser'
+import session                          from 'express-session'
+import RedisStore                       from 'connect-redis'
+let redis                               = RedisStore(session)
+
+import passport                         from 'passport'
+
+import bodyParser                       from 'body-parser'
+
+import path                             from 'path'
+
+import i18next                          from 'i18next'
+import FileSystemBackend                from 'i18next-node-fs-backend'
+import i18nextMiddleware                from 'i18next-express-middleware'
 
 i18next
-    .use(Backend)
-    .use(i18nextExpressMiddleware.LanguageDetector)
+    .use(i18nextMiddleware.LanguageDetector)
+    .use(FileSystemBackend)
     .init({
-        backend:    {
-                        loadPath: __dirname + '/../locales/{{lng}}/translation.json',
-                        addPath: __dirname + '/../locales/{{lng}}/translation.missing.json'
-                    },
-    fallbackLng:    'de',
-    preload:        ['en', 'de'],
-    saveMissing:    true,
-    detection:      {
-                        order: ['session', 'cookie', 'querystring'],
-                    }
-    }, function(err, t) {
-        if(err) {
+        detection:      {
+                            order: ['session', 'cookie', 'header'],
+                            lookupCookie: config.cookie.i18n,
+                            //cookieDomain: config.foocore.domain,
+                            caches: false //['cookie']
+                        },
+        backend:        {
+                            loadPath: path.join(__dirname, '..', 'locales', '{{lng}}', 'translation.json')
+                        },
+        fallbackLng:    'de',
+        preload:        ['en', 'de'],
+        debug:          false,
+        lng:            'de',
+    }, (err, t) => {
+        /* loading done */
+        if (err) {
             logerror('i18next init failed: %O', err)
         } else {
-            logdebug('i18next language loaded... translated... %s', i18next.t('language'))
+            log('i18next loaded: %O', i18next.language)
         }
-  })
+    })
 
-const port  = process.env.PORT || 1337
-const app   = express()
-app.use(helmet({
-    hsts: false
-}));
+app.use(helmet.hidePoweredBy())
+app.use(helmet.noCache())
 
-app.use(session({
-    store:              new RedisStore(),
-    secret:             config.cookie.secret,
-    resave:             config.cookie.resave,
-    saveUninitialized:  config.cookie.saveUninitialized
+app.use(express.static(config.http.public))
+app.use(i18nextMiddleware.handle(i18next))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+    extended:   true,
+    limit:      100000000
 }))
+app.use(cookieParser())
 
-app.use(i18nextExpressMiddleware.handle(i18next))
-
-global.tableId  = fs.readFileSync(config.serialization.tableIdFilestorepath, 'utf-8') || 1
-global.orders   = JSON.parse(fs.readFileSync(config.serialization.ordersFilestorepath, 'utf-8')) || []
-global.meta     = JSON.parse(fs.readFileSync(config.serialization.metaFilestorepath, 'utf-8')) || []
-global.paied    = JSON.parse(fs.readFileSync(config.serialization.paiedFilestorepath, 'utf-8')) || []
-
-const http      = require('http').Server(app)
-const socket    = require('./lib/socketConnection')
-socket.hobbitIO(http)
-socket.setConfig(config)
-
-const serializeJson = require('./lib/serializeJson')
-serializeJson.setConfig(config)
-
-setInterval(function() {
-    serializeJson.sync(global.tableId, global.orders, global.meta, global.paied)
-}, config.serialization.interval)
-
-const hbs = exphbs.create({
-    defaultLayout: 'main',
-    partialsDir: [
-        'views/partials/'
-    ],
-    extname: '.hbs',
-    helpers: {
-        t: (key, options) => getLangT(key, options)
+/* TODO */
+const sessionstore = new redis()
+/*{
+    host: config.redis.host,
+    port: config.redis.port,
+    password: config.redis.password,
+    prefix: config.redis.prefix
+});
+*/
+const redissession = session({
+    name:               config.cookie.name,
+    secret:             config.cookie.secret,
+    saveUninitialized:  false,
+    resave:             false,
+    store:              sessionstore,
+    logFn:              logdebug,
+    reapInterval:       2000,
+    reapSyncFallback :  false,
+    cookie:             {
+        secure:     true,
+        httpOnly:   true,
+        maxAge:     config.cookie.maxage
     }
 })
 
-function getLangT(key, options) {
-    return renderT(key, options)
-}
+app.use(redissession)
+app.use(passport.initialize())
+app.use(passport.session())
 
-let renderT = i18next.t
+app.engine('hbs', hbs.express4({
+    partialsDir:    config.http.partials,
+    layoutsDir:     path.join(config.http.views, 'layouts')
+}))
 
-app.engine('hbs', hbs.engine)
+app.set('trust proxy', 'loopback')
 app.set('view engine', 'hbs')
-app.set('views', path.join(__dirname, 'views'))
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')))
+app.set('views', config.http.views)
 
-app.get('*', (req, res, next) => {
-    renderT = req.t
+// is_authed
+app.use(function(req, res, next) {
+    log("Route: %s", req.path)
+    if(req.path === '/login' || req.path === '/logout') {
+        return next()
+    }
+
+    if(req.user) {
+        i18next.changeLanguage(req.language)
+        return next()
+    } else {
+        return res.redirect('/login')
+    }
+})
+
+// is_maintenanceMode
+app.use(async (req, res, next) => {
+    req.system = req.system || {}
+    /*
+    try {
+        const maintenancemode = await configuration.readKeyByKeyname('maintenancemode');
+        req.system.maintenancemode = parseInt(maintenancemode.value) === 1;
+    } catch (error) {
+        logerror('isMaintenanceMode failed: %O', error);
+    }*/
     next()
-})
+});
 
-const router = require('./routes')
-app.use(router)
-app.get('/', (req, res) => res.redirect('/home'))
+// we have to load routes after global middlewares, so they are useable
+app.use(routes)
 
-http.listen(port, async () => {
-    log('Listening on port %d', port)
-})
+server.listen(config.http.port, () => {
+    log('Listening on %s:%d', config.http.listen, config.http.port)
+});

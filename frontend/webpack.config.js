@@ -19,6 +19,7 @@ module.exports = {
         }
     },
     entry: {
+        'login': './login/index.js',
         'home': './home/index.js'
     },
     output: {
