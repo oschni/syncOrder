@@ -102,7 +102,33 @@ const redissession = session({
 app.use(redissession)
 app.use(passport.initialize())
 app.use(passport.session())
+/*
+passport.use(new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, function (err, user) {
+        if(err) { 
+            return done(err)
+        }
+        if(!user) { 
+            return done(null, false)
+        }
+        if(!user.verifyPassword(password)) { 
+            return done(null, false)
+        }
+        return done(null, user)
+    })
+}))
 
+passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true,
+        session: false
+    }, (req, username, password, done) => {
+        // request object is now first argument
+        // ...
+    }
+));
+*/
 app.engine('hbs', hbs.express4({
     partialsDir:    config.http.partials,
     layoutsDir:     path.join(config.http.views, 'layouts')

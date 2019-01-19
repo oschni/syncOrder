@@ -1,6 +1,30 @@
 <template>
-    <div>
-        foobar baz
+    <div class="mx-auto w-25 mt-3">
+        <b-img src="imgs/pizza-slice-rounded.svg" width="128" height="128" center fluid></b-img>
+        <b-form @submit="login" class="mt-2">
+            <b-form-group id="inputEmail"
+                    label="Email address:"
+                    label-for="inputEmail">
+                <b-form-input id="inputEmail"
+                        type="email"
+                        v-model="email"
+                        required
+                        placeholder="E-Mail Adresse">
+                </b-form-input>
+            </b-form-group>
+            <b-form-group id="inputPassword"
+                    label="Password:"
+                    label-for="inputPassword">
+                <b-form-input id="inputPassword"
+                        type="password"
+                        v-model="password"
+                        required
+                        placeholder="Password">
+                </b-form-input>
+            </b-form-group>
+            <b-button :size="'lg'" :variant="'primary'">Login</b-button> <b-button :variant="'link'" @click.prevent="register">Register</b-button>
+        </b-form>
+    </div>
         <!--<form class="form-signin" method="post" action="/login">
             <h2 class="form-signin-heading">{{$t(`login.headline`)}}</h2>
             <label for="UserNameTextField" class="sr-only">{{$(`login.email`)}}</label>
@@ -16,7 +40,6 @@
                 </div>-->
             <!-- // AUTH FAILED MSG -->
         <!--</form>-->
-    </div>
 </template>
 
 <script>
@@ -36,6 +59,8 @@ export default {
     },
     data: function() {
         return {
+            email:      null,
+            password:   null
         }
     },
     watch: {
@@ -45,6 +70,12 @@ export default {
     mounted: function() {
     },
     methods: {
+        register: function() {
+
+        },
+        login: function() {
+
+        }
     },
     computed: {
     }

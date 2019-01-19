@@ -19,8 +19,9 @@ module.exports = {
         }
     },
     entry: {
-        'login': './login/index.js',
-        'home': './home/index.js'
+        'login':            './login/index.js',
+        'home':             './home/index.js',
+        'global-css':       './global-css.js'
     },
     output: {
         path: path.join(__dirname, 'public', 'dist', 'bundles'),

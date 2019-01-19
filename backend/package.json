@@ -26,6 +26,7 @@
     "i18next-node-fs-backend": "^2.1.1",
     "moment": "^2.23.0",
     "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "pg": "^7.8.0",
     "pg-database": "git+https://github.com/oschni/pg-database.git",
     "socket.io": "^2.2.0",
